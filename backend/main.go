@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"os"
 	"sync"
 
 	"github.com/dghubble/go-twitter/twitter"
@@ -23,18 +24,25 @@ func getOutboundIP() net.IP {
     return localAddr.IP
 }
 
-func helloWorld() {
+func helloWorld(port string) {
 	fmt.Println("--------TwitterTrendR: Backend server--------")
 	fmt.Println()
 	fmt.Println("  Launched on host: ", getOutboundIP())
-	fmt.Println("  Launched on port: ", 5000)
+	fmt.Println("  Launched on port: ", port)
 	fmt.Println()
 	fmt.Println("---------------------------------------------")
 }
 
 func main() {
-	helloWorld()
-	handleRequests()
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Println("$PORT not set switching to default port")
+		port = "5000"
+	}
+
+	helloWorld(port)
+	handleRequests(port)
 }
 
 func trendAnalysis(client *twitter.Client, trend twitter.Trend, wg *sync.WaitGroup) {

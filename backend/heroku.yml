@@ -2,7 +2,7 @@
 # Officially unsupported, but works.
 build:
     languages:
-        - go
+        - go1.15
 
 run:
     web: twittertrendr
